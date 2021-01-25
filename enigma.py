@@ -1,26 +1,34 @@
 import random
 
+class Rotor():
 
-letras = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"
+    def __init__(self, abecedario="ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"):
+        self.abecedario = abecedario
+        self.rotor = []
+        self.ix = 0
+        otrasLetras = list(self.abecedario)
+        for l in self.abecedario:
+            n = random.randrange(len(otrasLetras))
+            self.rotor.append((l, otrasLetras[n]))
+            otrasLetras.pop(n)
 
-def CreaRotor():
-    resultado = ''
-    for l in letras:
-        n = random.randrange(len(letras))
-        if letras[n] in resultado:
-            pass
-        else:
-            resultado += letras[n]
-    return resultado
+        self.rotorC = self.rotor[:]
+        
+
+    def codifica(self, letra):
+        pLetra = self.abecedario.index(letra)
+        return self.rotorC[pLetra][1]
+        self.avanza()
+
+        #raise ValueError("{} no pertenece al abecedario".format(letra))
 
 
-def CreaRotorM():
-    resultado = []
-    otrasLetras = list(letras)
-    for l in letras:
-        n = random.randrange(len(otrasLetras))
-        resultado.append((l, otrasLetras[n]))
-        otrasLetras.pop(n)
-    return resultado
 
-r = CreaRotorM()
+    def posicionInicial(self, letra):
+        position = self.abecedario.index(letra)
+        self.rotorC = self.rotor[position:] + self.rotor[:position]
+
+    def avanza(self):
+        self.rotorC = self.rotorC[1:] + self.rotorC[0]
+
+
