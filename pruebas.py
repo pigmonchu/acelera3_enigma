@@ -6,6 +6,7 @@ rotor_pruebas = [('A', 'Ñ'), ('B', 'M'), ('C', 'H'), ('D', 'C'), ('E', 'K'), ('
                  ('R', 'X'), ('S', 'A'), ('T', 'I'), ('U', 'Q'), ('V', 'T'), ('W', 'V'), 
                  ('X', 'Y'), ('Y', 'L'), ('Z', 'D')]
 
+("ABCDEFGHIJKLMNÑOPQRSTUVWXYZ", "ÑMHCKWNOJFZEPSUBGRXAIQTVYLD")
 r = Rotor()
 r.rotor = rotor_pruebas
 
@@ -15,9 +16,9 @@ r.posicionInicial('S')
 print(r.rotorC)
 
 '''
-[('S', 'A'), ('T', 'I'), ('U', 'Q'), ('V', 'T'), ('W', 'V'), 
-('X', 'Y'), ('Y', 'L'), ('Z', 'D'),('A', 'Ñ'), ('B', 'M'), ('C', 'H'), ('D', 'C'), ('E', 'K'), ('F', 'W'), 
+[('A', 'Ñ'), ('B', 'M'), ('C', 'H'), ('D', 'C'), ('E', 'K'), ('F', 'W'), 
 ('G', 'N'), ('H', 'O'), ('I', 'J'), ('J', 'F'), ('K', 'Z'), ('L', 'E'), 
 ('M', 'P'), ('N', 'S'), ('Ñ', 'U'), ('O', 'B'), ('P', 'G'), ('Q', 'R'), 
-('R', 'X') ]
+('R', 'X'),('S', 'A'), ('T', 'I'), ('U', 'Q'), ('V', 'T'), ('W', 'V'), 
+('X', 'Y'), ('Y', 'L'), ('Z', 'D') ]
 '''
