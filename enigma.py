@@ -44,18 +44,26 @@ class Reflector():
             - refleja(letra_entrada) -> letra  
     '''    
 
+    def validate_conf(self, conf):
+        if ''.join(sorted(list(conf[0]))) != ''.join(sorted(list(conf[1]))):
+            raise AttributeError('Reflector inconsistente')
+        elif conf[0] != conf[1][::-1]:
+            raise AttributeError('Reflector no simétrico')
+
+
     def __init__(self, conf=["ABCDEFGHIJKLMNÑOPQRSTUVWXYZ","ZYXWVWTSRQPOÑNMLKJIHGFEDCBA"]):
         '''
             si conf viene vacio, crear uno (abecedario)
             si conf viene lleno, comprobar que cumple las especificaciones
         '''
+        self.validate_conf(conf)
         self.configuracion = conf
 
 
 
-    def refleja(self, letra_entrada):
-        posE = self.configuracion[0].index(letra_entrada)
-        return self.configuracion[1][posE]
+    def refleja(self, pin):
+        letra = self.configuracion[0][pin]
+        return self.configuracion[1].index(letra)
 
 
 class Rotor():
@@ -72,9 +80,18 @@ class Rotor():
             - decodifica(indice): Devuelve el pin de entrada
             - avanza(): Rota una posición la conexión. Comprueba si debe activar swSalto 
     '''
-    def __init__(self, abecedario, cortocircuito=None):
+    def __init__(self, abecedario, cortocircuito, paso=None):
         self.abecedario = abecedario 
         self.cortocircuito = cortocircuito
+
+        if ''.join(sorted(list(abecedario))) != ''.join(sorted(list(cortocircuito))):
+            raise AttributeError('abecedario y cortocircuito incoherentes')
+
+        if not paso:
+            self.paso = self.abecedario[-1]
+        else:
+            self.paso = paso
+
         self._pos_ini = 0
 
     def codifica(self, indice):
@@ -91,6 +108,7 @@ class Rotor():
 
     def avanza(self):
         self._pos_ini = (self._pos_ini + 1) % len(self.abecedario)
+        return self.pos_ini in self.paso
 
 
     @property
@@ -102,7 +120,58 @@ class Rotor():
         self._pos_ini = self.abecedario.index(value)
 
 class Enigma():
-    pass
+    def __init__(self, rotores, reflector, ini=None):
+        self.rotores = rotores
+        self.reflector = reflector
+
+        self.abecedario = self.rotores[0].abecedario
+        for rotor in self.rotores:
+            if rotor.abecedario != self.abecedario:
+                raise AttributeError('{} no es igual al abecedario de la maquina: {}'.format(rotor.abecedario, self.abecedario) )
+    
+        alfareflector = self.reflector.configuracion[0]
+        if ''.join(sorted(list(alfareflector))) != ''.join(sorted(list(self.abecedario))):
+                raise AttributeError('{} no es igual al abecedario de la maquina: {}'.format(self.reflector.configuracion[0], self.abecedario) )
+
+        if not ini:
+            self.ini = self.rotores[0].abecedario[0]*len(self.rotores)
+        else:
+            self.ini = ini
+
+
+    def codifica(self, frase):
+        frase_output = ""
+        for letra in frase:
+            input = self.abecedario.index(letra)
+            _next = True
+            for rotor in self.rotores:
+                if _next:
+                    _next = rotor.avanza()
+                input = rotor.codifica(input)
+
+            output = self.reflector.refleja(input)
+
+            for rotor in self.rotores[::-1]:
+                output = rotor.decodifica(output)
+
+            frase_output += self.abecedario[output]
+        return frase_output
+
+    @property
+    def ini(self):
+        return self._ini
+
+    @ini.setter
+    def ini(self, value):
+        self._ini = value
+        for ix, rotor in enumerate(self.rotores):
+            rotor.pos_ini = self._ini[ix]
+
+
+
+
+
+
     '''
     TODO:
         - reflector: su configuración prefijada en principio
@@ -112,3 +181,4 @@ class Enigma():
           Si se pasa la salida de codifica como entrada volviendo la posi_inicial. Obtenemos
           la otra entrada. 
     '''
+
