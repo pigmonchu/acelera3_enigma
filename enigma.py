@@ -1,5 +1,8 @@
 import random
 
+def miFuncionCreaAbecedario():
+    pass
+
 class Rotor_():
 
     def __init__(self, abecedario="ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"):
@@ -70,26 +73,33 @@ class Rotor():
             - avanza(): Rota una posición la conexión. Comprueba si debe activar swSalto 
     '''
     def __init__(self, abecedario, cortocircuito=None):
-        self.conexion = [abecedario, cortocircuito]
-        self._pos_ini = None
+        self.abecedario = abecedario 
+        self.cortocircuito = cortocircuito
+        self._pos_ini = 0
 
     def codifica(self, indice):
-        letra = self.conexion[0][indice]
-        indice_izda = self.conexion[1].index(letra)
+        letra = self.abecedario[(indice + self._pos_ini) % len(self.abecedario)]
+        indice_izda = self.cortocircuito.index(letra)
+        indice_izda = (indice_izda - self._pos_ini) % len(self.abecedario)
         return indice_izda
 
     def decodifica(self, indice):
-        letra = self.conexion[1][indice]
-        indice_dcha = self.conexion[0].index(letra)
+        letra = self.cortocircuito[(indice + self._pos_ini) % len(self.abecedario)]
+        indice_dcha = self.abecedario.index(letra)
+        indice_dcha = (indice_dcha - self._pos_ini) % len(self.abecedario)
         return indice_dcha
+
+    def avanza(self):
+        self._pos_ini = (self._pos_ini + 1) % len(self.abecedario)
+
 
     @property
     def pos_ini(self):
-        return self._pos_ini
+        return self.abecedario[self._pos_ini]
 
     @pos_ini.setter
     def pos_ini(self, value):
-        self._pos_ini = self.conexion[0].index(value)
+        self._pos_ini = self.abecedario.index(value)
 
 class Enigma():
     pass
