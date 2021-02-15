@@ -1,39 +1,5 @@
 import random
 
-def miFuncionCreaAbecedario():
-    pass
-
-class Rotor_():
-
-    def __init__(self, abecedario="ABCDEFGHIJKLMNÑOPQRSTUVWXYZ"):
-        self.abecedario = abecedario
-        self.rotor = []
-        self.ix = 0
-        otrasLetras = list(self.abecedario)
-        for l in self.abecedario:
-            n = random.randrange(len(otrasLetras))
-            self.rotor.append((l, otrasLetras[n]))
-            otrasLetras.pop(n)
-
-        self.rotorC = self.rotor[:]
-        
-
-    def codifica(self, letra):
-        pLetra = self.abecedario.index(letra)
-        return self.rotorC[pLetra][1]
-        self.avanza()
-
-        #raise ValueError("{} no pertenece al abecedario".format(letra))
-
-
-
-    def posicionInicial(self, letra):
-        position = self.abecedario.index(letra)
-        self.rotorC = self.rotor[position:] + self.rotor[:position]
-
-    def avanza(self):
-        self.rotorC = self.rotorC[1:] + self.rotorC[0]
-
 
 class Reflector():
     '''
@@ -47,8 +13,6 @@ class Reflector():
     def validate_conf(self, conf):
         if ''.join(sorted(list(conf[0]))) != ''.join(sorted(list(conf[1]))):
             raise AttributeError('Reflector inconsistente')
-        elif conf[0] != conf[1][::-1]:
-            raise AttributeError('Reflector no simétrico')
 
 
     def __init__(self, conf=["ABCDEFGHIJKLMNÑOPQRSTUVWXYZ","ZYXWVWTSRQPOÑNMLKJIHGFEDCBA"]):
@@ -67,19 +31,6 @@ class Reflector():
 
 
 class Rotor():
-    '''
-        TODO:
-            - Conexion: Lista de cadenas (abecedario, cortocircuito) que 
-              determina la entrada y salida según el caracter de salida o entrada
-            - Posicion: Indice/caracter en posición cero de la conexión
-            - Pasos ¿?: Número de pasos girados desde que empezamos a codificar
-            - Salto: Indice, caracter de abecedario en que se obliga al salto del 
-              siguiente rotor si lo hubiera
-            - swSalto ¿?: True o False
-            - codifica(indice): Devuelve el pin de salida
-            - decodifica(indice): Devuelve el pin de entrada
-            - avanza(): Rota una posición la conexión. Comprueba si debe activar swSalto 
-    '''
     def __init__(self, abecedario, cortocircuito, paso=None):
         self.abecedario = abecedario 
         self.cortocircuito = cortocircuito
@@ -159,6 +110,7 @@ class Enigma():
 
     @property
     def ini(self):
+        self._ini = ''.join([rotor.pos_ini for rotor in self.rotores])
         return self._ini
 
     @ini.setter

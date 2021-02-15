@@ -1,20 +1,39 @@
 import unittest
 import enigma
 
+    '''
+                      1         2
+            01234567890123456789012345
+            ABCDEFGHIJKLMNOPQRSTUVWXYZ
+            EKMFLGDQVZNTOWYHXUSPAIBRCJ
+    '''
+
+
 
 abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 rotor_types={
-    "I": ("EKMFLGDQVZNTOWYHXUSPAIBRCJ", "Q"),
-    "II": ("AJDKSIRUXBLHWTMCQGZNPYFVOE", "E"),
+    "I": ("UWYGADFPVZBECKMTHXSLRINQOJ", "Q"),
+    "II": ("AJPCZWRLFBDKOTYUQGENHXMIVS", "E"),
     "III": ("BDFHJLCPRTXVZNYEIWGAKMUSQO", "V"),
-    "IV": ("ESOVPZJAYQUIRHXLNFTGKDCMWB", "J"),
-    "V": ("VZBRGITYUPSDNHLXAWMJQOFECK", "Z"),
-    "VI": ("JPGVOUMFYQBENHZRDKASXLICTW", "ZM"),
-    "VII": ("NZJHGRCXMYSWBOUFAIVLPEKQDT", "ZM"),
-    "VIII": ("FKQHTLXOCBJSPDZRAMEWNIUYGV", "ZM"),
+    "IV": ("TAGBPCSDQEUFVNZHYIXJWLRKOM", "J"),
+    "V": ("QCYLXWENFTZOSMVJUDKGIARPHB", "Z"),
+    "VI": ("SKXQLHCNWARVGMEBJPTYFDZUIO", "ZM"),
+    "VII": ("QMGYVPEDRCWTIANUXFKZOSLHJB", "ZM"),
+    "VIII": ("QJINSAYDVKBFRUHMCPLEWZTGXO", "ZM"),
 }
-r = "ABCDEFGHIJKLMNOPYQRSTUVWXZ"
-UKW = ["ABCDEFGHIJKLMNOPYQRSTUVWXZ", r[::-1]]
+reflector_types= {
+    'D': "ZXWVUTSRQYPONMLKIHGFEDCBJA",
+    'Bfine': 'ENKQAUYWJICOPBLMDXZVFTHRGS',
+    'Cfine': 'RDOBJNTKVEHMLFCWZAXGYIPSUQ'
+}
+r = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+UKW = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+       "ZXWVUTSRQYPONMLKIHGFEDCBJA"]
+Bfine = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+         "ENKQAUYWJICOPBLMDXZVFTHRGS"]
+Cfine = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+         "RDOBJNTKVEHMLFCWZAXGYIPSUQ"]
+
 
 class ReflectorTest(unittest.TestCase):
     def test_reflejaOK(self):
@@ -89,7 +108,8 @@ class EnigmaTest(unittest.TestCase):
 
         maquina = enigma.Enigma([rotor1, rotor2, rotor3], reflector=reflector, ini='ZAA')
         
-        self.assertEqual(maquina.codifica("HOLA"), "LHCD")
+        self.assertEqual(maquina.codifica("HOLA"), "LCHD")
+        self.assertEqual(maquina.ini, "DAA")
 
 
 
